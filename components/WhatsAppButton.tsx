@@ -12,7 +12,7 @@ export default function WhatsAppButton() {
             href={waLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="fixed bottom-8 right-8 z-50 flex h-16 w-16 items-center justify-center rounded-full bg-[#25D366] text-white shadow-2xl shadow-green-500/40 transition-all hover:scale-110 hover:rotate-6 active:scale-95 group"
+            className="float-btn-wa group"
         >
             <div className="absolute -left-32 top-1/2 -translate-y-1/2 rounded-xl bg-white dark:bg-slate-800 px-4 py-2 text-sm font-bold text-slate-700 dark:text-slate-200 shadow-xl opacity-0 transition-all group-hover:opacity-100 pointer-events-none border border-slate-100 dark:border-slate-700">
                 Tanya Admin?

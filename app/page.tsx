@@ -177,7 +177,7 @@ export default function HomePage() {
                                 <Link
                                     key={job.id}
                                     href={`/loker-dosen/${job.jurusan}/${job.slug}`}
-                                    className="group overflow-hidden rounded-4xl bg-white dark:bg-slate-900 shadow-xl shadow-slate-200/50 dark:shadow-black/20 border border-transparent dark:border-slate-800 transition-all hover:-translate-y-2 hover:shadow-2xl"
+                                    className="group overflow-hidden card-premium hover:-translate-y-2 hover:shadow-2xl"
                                 >
                                     <div className="relative h-48 w-full overflow-hidden">
                                         <Image
@@ -277,7 +277,7 @@ export default function HomePage() {
                             ].map((stat, i) => (
                                 <div
                                     key={i}
-                                    className="group flex items-center gap-5 rounded-4xl bg-white dark:bg-slate-900 p-6 shadow-xl shadow-slate-200/50 dark:shadow-black/20 border border-transparent dark:border-slate-800 transition-all hover:-translate-y-1 hover:shadow-2xl"
+                                    className="stat-card group"
                                 >
                                     <div
                                         className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${stat.color} dark:bg-slate-800 transition-transform group-hover:scale-110`}

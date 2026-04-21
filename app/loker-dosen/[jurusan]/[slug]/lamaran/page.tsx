@@ -191,7 +191,7 @@ export default function ApplicationFormPage({
                     <ArrowLeft size={16} /> Kembali ke Detail Lowongan
                 </Link>
 
-                <div className="rounded-3xl bg-white dark:bg-slate-900 p-8 shadow-xl shadow-slate-200/50 dark:shadow-black/40 border border-transparent dark:border-slate-800 md:p-12 transition-all">
+                <div className="card-premium p-8 md:p-12">
                     <div className="mb-10">
                         <h1 className="text-3xl font-black text-slate-900 dark:text-white">
                             Formulir Lamaran
@@ -206,7 +206,7 @@ export default function ApplicationFormPage({
                     <form onSubmit={handleSubmit} className="space-y-8" noValidate>
                         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                             <div className="space-y-3">
-                                <label className="text-sm font-black tracking-wide text-slate-700 dark:text-slate-300 ml-1">
+                                <label className="form-label">
                                     Nama Lengkap
                                 </label>
                                 <input
@@ -215,7 +215,7 @@ export default function ApplicationFormPage({
                                     onChange={handleChange}
                                     type="text"
                                     placeholder="Masukkan nama sesuai KTP"
-                                    className={`w-full rounded-2xl border bg-slate-50/50 dark:bg-slate-950 px-5 py-4 text-slate-900 dark:text-white focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-4 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium ${
+                                    className={`input-field ${
                                         errors.nama 
                                         ? "border-red-500 focus:border-red-500 focus:ring-red-500/10" 
                                         : "border-slate-200 dark:border-slate-800 focus:border-blue-600 focus:ring-blue-600/5"
@@ -228,7 +228,7 @@ export default function ApplicationFormPage({
                                 )}
                             </div>
                             <div className="space-y-3">
-                                <label className="text-sm font-black tracking-wide text-slate-700 dark:text-slate-300 ml-1">
+                                <label className="form-label">
                                     Email Aktif
                                 </label>
                                 <input
@@ -237,7 +237,7 @@ export default function ApplicationFormPage({
                                     onChange={handleChange}
                                     type="email"
                                     placeholder="name@gmail.com"
-                                    className={`w-full rounded-2xl border bg-slate-50/50 dark:bg-slate-950 px-5 py-4 text-slate-900 dark:text-white focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-4 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium ${
+                                    className={`input-field ${
                                         errors.email 
                                         ? "border-red-500 focus:border-red-500 focus:ring-red-500/10" 
                                         : "border-slate-200 dark:border-slate-800 focus:border-blue-600 focus:ring-blue-600/5"
@@ -253,7 +253,7 @@ export default function ApplicationFormPage({
 
                         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                             <div className="space-y-3">
-                                <label className="text-sm font-black tracking-wide text-slate-700 dark:text-slate-300 ml-1">
+                                <label className="form-label">
                                     Nomor WhatsApp
                                 </label>
                                 <input
@@ -262,7 +262,7 @@ export default function ApplicationFormPage({
                                     onChange={handleChange}
                                     type="tel"
                                     placeholder="0812..."
-                                    className={`w-full rounded-2xl border bg-slate-50/50 dark:bg-slate-950 px-5 py-4 text-slate-900 dark:text-white focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-4 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium ${
+                                    className={`input-field ${
                                         errors.whatsapp 
                                         ? "border-red-500 focus:border-red-500 focus:ring-red-500/10" 
                                         : "border-slate-200 dark:border-slate-800 focus:border-blue-600 focus:ring-blue-600/5"
@@ -275,7 +275,7 @@ export default function ApplicationFormPage({
                                 )}
                             </div>
                             <div className="space-y-3">
-                                <label className="text-sm font-black tracking-wide text-slate-700 dark:text-slate-300 ml-1">
+                                <label className="form-label">
                                     Domisili Saat Ini
                                 </label>
                                 <input
@@ -284,7 +284,7 @@ export default function ApplicationFormPage({
                                     onChange={handleChange}
                                     type="text"
                                     placeholder="Kota tempat tinggal"
-                                    className={`w-full rounded-2xl border bg-slate-50/50 dark:bg-slate-950 px-5 py-4 text-slate-900 dark:text-white focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-4 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium ${
+                                    className={`input-field ${
                                         errors.domisili 
                                         ? "border-red-500 focus:border-red-500 focus:ring-red-500/10" 
                                         : "border-slate-200 dark:border-slate-800 focus:border-blue-600 focus:ring-blue-600/5"
@@ -299,7 +299,7 @@ export default function ApplicationFormPage({
                         </div>
 
                         <div className="space-y-4">
-                            <label className="text-sm font-black tracking-wide text-slate-700 dark:text-slate-300 ml-1">
+                            <label className="form-label">
                                 Pendidikan Terakhir
                             </label>
                             <div className={`grid grid-cols-1 gap-3 sm:grid-cols-3 rounded-2xl transition-all ${errors.pendidikan ? "p-3 border border-red-500 bg-red-50/30 dark:bg-red-950/10" : ""}`}>
@@ -342,7 +342,7 @@ export default function ApplicationFormPage({
                         </div>
 
                         <div className="space-y-3">
-                            <label className="text-sm font-black tracking-wide text-slate-700 dark:text-slate-300 ml-1">
+                            <label className="form-label">
                                 Jurusan Pendidikan
                             </label>
                             <input
@@ -351,7 +351,7 @@ export default function ApplicationFormPage({
                                 onChange={handleChange}
                                 type="text"
                                 placeholder="Contoh: Magister Manajemen Bisnis"
-                                className={`w-full rounded-2xl border bg-slate-50/50 dark:bg-slate-950 px-5 py-4 text-slate-900 dark:text-white focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-4 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium ${
+                                className={`input-field ${
                                     errors.jurusanPelamar 
                                     ? "border-red-500 focus:border-red-500 focus:ring-red-500/10" 
                                     : "border-slate-200 dark:border-slate-800 focus:border-blue-600 focus:ring-blue-600/5"
@@ -365,7 +365,7 @@ export default function ApplicationFormPage({
                         </div>
 
                         <div className="space-y-3">
-                            <label className="text-sm font-black tracking-wide text-slate-700 dark:text-slate-300 ml-1">
+                            <label className="form-label">
                                 Pengalaman Mengajar
                             </label>
                             <textarea
@@ -374,7 +374,7 @@ export default function ApplicationFormPage({
                                 onChange={handleChange}
                                 rows={4}
                                 placeholder="Ceritakan singkat pengalaman mengajar atau profesional Anda..."
-                                className={`w-full rounded-2xl border bg-slate-50/50 dark:bg-slate-950 px-5 py-4 text-slate-900 dark:text-white focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-4 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium h-32 ${
+                                className={`input-field h-32 ${
                                     errors.pengalaman 
                                     ? "border-red-500 focus:border-red-500 focus:ring-red-500/10" 
                                     : "border-slate-200 dark:border-slate-800 focus:border-blue-600 focus:ring-blue-600/5"
@@ -459,10 +459,8 @@ export default function ApplicationFormPage({
                         <button
                             type="submit"
                             disabled={isSaving}
-                            className={`group flex w-full items-center justify-center gap-2 py-4 rounded-xl font-bold text-base transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed shadow-xl ${
-                                isSaving
-                                    ? 'bg-slate-400 cursor-not-allowed'
-                                    : 'bg-linear-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-500 hover:to-indigo-500 hover:shadow-blue-500/20'
+                            className={`btn-primary group ${
+                                isSaving ? 'bg-slate-400 cursor-not-allowed' : ''
                             }`}
                         >
                             {isSaving ? (
