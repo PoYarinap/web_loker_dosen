@@ -1,36 +1,116 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎓 Web Loker Dosen
 
-## Getting Started
+Platform Website untuk **mencari dan melamar lowongan dosen secara online**.
 
-First, run the development server:
+---
+
+## 🚀 Deskripsi
+
+**Web Loker Dosen** adalah aplikasi web yang memungkinkan pengguna untuk:
+
+* Melihat daftar lowongan dosen
+* Mengirim lamaran langsung melalui website
+* Data lamaran tersimpan otomatis ke Google Spreadsheet
+
+Cocok untuk institusi atau admin yang ingin mengelola lamaran tanpa sistem yang kompleks.
+
+---
+
+## ✨ Fitur Utama
+
+* 📄 Menampilkan daftar lowongan dosen
+* 📝 Formulir lamaran online
+* 📥 Data pelamar masuk otomatis ke Spreadsheet
+* 📱 Responsive (bisa di HP & laptop)
+* 💬 Tombol WhatsApp untuk kontak admin
+
+---
+
+## 🛠️ Teknologi yang Digunakan
+
+* **Frontend:** Next.js, TypeScript, Tailwind CSS
+* **Backend:** API sederhana (Next.js API / form handler)
+* **Database:** Google Spreadsheet
+* **Tools:** Git, GitHub
+
+---
+
+## 🧩 Cara Kerja Sistem
+
+1. User membuka website
+2. User melihat lowongan dosen
+3. User mengisi form lamaran
+4. Data dikirim ke backend
+5. Data otomatis tersimpan di **Google Spreadsheet**
+
+---
+
+## 📸 Preview (Opsional)
+
+> Tambahkan screenshot website kamu di sini nanti
+
+---
+
+## ⚙️ Instalasi & Menjalankan Project
 
 ```bash
+# clone repo
+git clone https://github.com/PoYarinap/web_loker_dosen.git
+
+# masuk folder
+cd web_loker_dosen
+
+# install dependencies
+npm install
+
+# jalankan project
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Buka di browser:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 📂 Struktur Project (Sederhana)
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/
+components/
+public/
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📬 Kontak
 
-## Deploy on Vercel
+Jika ada pertanyaan atau ingin bekerja sama:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+* 📧 Email: [weslaycharlesyarinap@gmail.com](mailto:weslaycharlesyarinap@gmail.com)
+* 🌐 Portfolio: https://weslayyarinap.vercel.app/
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## ⚡ Catatan
+
+Project ini dibuat untuk pembelajaran dan pengembangan skill.
+Masih akan terus dikembangkan ke depannya 🚀
+
+---
+
+## ⭐ Dukungan
+
+Jika kamu suka project ini:
+
+* ⭐ Star repo ini
+* 🍴 Fork untuk pengembangan
+* 💡 Beri saran & feedback
+
+---
+
+<p align="center">
+  Dibuat dengan semangat belajar 💪
+</p>
