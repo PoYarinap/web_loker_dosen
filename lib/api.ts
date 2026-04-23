@@ -1,0 +1,73 @@
+const API_BASE_URL = 'https://seomaster.stekom.ac.id/api/public/organizations';
+const ORG_ID = process.env.SEOMASTER_ORG_ID;
+const API_KEY = process.env.SEOMASTER_API_KEY;
+
+export interface APIContent {
+    id: string;
+    projectId: string;
+    content: string;
+    title: string;
+    metaDescription: string;
+    tags: string;
+    thumbnailUrl: string;
+    slug: string;
+    createdAt: string;
+}
+
+export interface APIResponse {
+    data: APIContent[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+}
+
+const PROJECT_IDS: Record<string, string | undefined> = {
+    'akuntansi': process.env.PROJECT_ID_AKUNTANSI,
+    'manajemen': process.env.PROJECT_ID_MANAJEMEN,
+};
+
+export async function getArticlesByJurusan(jurusanSlug: string): Promise<APIContent[]> {
+    const projectId = PROJECT_IDS[jurusanSlug];
+    console.log(`[API] Fetching articles for ${jurusanSlug} with projectId: ${projectId}`);
+    
+    if (!projectId) {
+        console.warn(`[API] No projectId found for jurusan: ${jurusanSlug}`);
+        return [];
+    }
+    if (!ORG_ID || !API_KEY) {
+        console.warn('[API] Missing SEOMASTER_ORG_ID or SEOMASTER_API_KEY in environment');
+        return [];
+    }
+
+    try {
+        const url = `${API_BASE_URL}/${ORG_ID}/contents?projectId=${projectId}&page=1&limit=10`;
+        console.log(`[API] Calling URL: ${url}`);
+        
+        const response = await fetch(url, {
+            headers: {
+                'X-API-Key': API_KEY,
+                'Accept': 'application/json',
+            },
+            next: { revalidate: 3600 } 
+        });
+
+        if (!response.ok) {
+            console.error(`[API] Fetch failed with status: ${response.status}`);
+            return [];
+        }
+        
+        const result: APIResponse = await response.json();
+        console.log(`[API] Successfully fetched ${result.data?.length || 0} articles`);
+        return result.data || [];
+    } catch (error) {
+        console.error('[API] Error fetching articles:', error);
+        return [];
+    }
+}
+
+export async function getArticleBySlug(jurusanSlug: string, jobSlug: string): Promise<APIContent | null> {
+    console.log(`[API] Getting article by slug: ${jobSlug} for jurusan: ${jurusanSlug}`);
+    const articles = await getArticlesByJurusan(jurusanSlug);
+    return articles.find(a => a.slug === jobSlug) || null;
+}

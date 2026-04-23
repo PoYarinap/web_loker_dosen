@@ -1,9 +1,10 @@
-import { DATA_JURUSAN } from "@/lib/data";
+import { DATA_JURUSAN, JobDetail } from "@/lib/data";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Calendar, ArrowRight, ChevronRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import { getArticlesByJurusan } from "@/lib/api";
 
 export async function generateMetadata({ params }: { params: Promise<{ jurusan: string }> }) {
   const { jurusan: jurusanSlug } = await params;
@@ -17,10 +18,38 @@ export async function generateMetadata({ params }: { params: Promise<{ jurusan: 
 
 export default async function JurusanPage({ params }: { params: Promise<{ jurusan: string }> }) {
   const { jurusan: jurusanSlug } = await params;
-  const jurusan = DATA_JURUSAN.find((j) => j.slug === jurusanSlug);
+  const staticJurusan = DATA_JURUSAN.find((j) => j.slug === jurusanSlug);
 
-  if (!jurusan) {
+  if (!staticJurusan) {
     notFound();
+  }
+
+  // Fetch dynamic articles if the jurusan is Akuntansi or Manajemen
+  let displayItems: JobDetail[] = staticJurusan.items;
+  
+  if (jurusanSlug === 'akuntansi' || jurusanSlug === 'manajemen') {
+    console.log(`[Page] Detected dynamic jurusan: ${jurusanSlug}. Fetching from API...`);
+    const apiArticles = await getArticlesByJurusan(jurusanSlug);
+    console.log(`[Page] API returned ${apiArticles.length} items for ${jurusanSlug}`);
+    
+    if (apiArticles.length > 0) {
+      // Map API data to JobDetail structure
+      displayItems = apiArticles.map(art => ({
+        id: art.id,
+        jurusan: jurusanSlug,
+        daerah: art.title.split(' di ').length > 1 ? art.title.split(' di ')[1].split(' Periode')[0] : "Indonesia",
+        bulan: "April",
+        tahun: 2026,
+        slug: art.slug,
+        title: art.title,
+        thumbnail: art.thumbnailUrl,
+        university: "Universitas Stekom",
+        description: art.metaDescription,
+        qualificationIntro: "",
+        qualifications: [],
+        applyEmail: "hrd@stekom.ac.id"
+      }));
+    }
   }
 
   return (
@@ -35,7 +64,7 @@ export default async function JurusanPage({ params }: { params: Promise<{ jurusa
             <ChevronRight size={14} />
             <Link href="/loker-dosen" className="hover:text-blue-600 dark:hover:text-blue-400">Loker Dosen</Link>
             <ChevronRight size={14} />
-            <span className="text-slate-900 dark:text-slate-200">{jurusan.name}</span>
+            <span className="text-slate-900 dark:text-slate-200">{staticJurusan.name}</span>
           </div>
         </div>
 
@@ -43,8 +72,8 @@ export default async function JurusanPage({ params }: { params: Promise<{ jurusa
         <header className="mx-auto max-w-7xl px-6 pb-12">
           <div className="relative h-[300px] w-full overflow-hidden rounded-3xl shadow-2xl">
             <Image
-              src={jurusan.thumbnail}
-              alt={jurusan.name}
+              src={staticJurusan.thumbnail}
+              alt={staticJurusan.name}
               fill
               priority
               sizes="100vw"
@@ -52,9 +81,9 @@ export default async function JurusanPage({ params }: { params: Promise<{ jurusa
             />
             <div className="absolute inset-0 bg-linear-to-t from-slate-900/80 via-slate-900/20 to-transparent" />
             <div className="absolute bottom-10 left-10 right-10">
-              <h1 className="text-4xl font-black text-white md:text-5xl">Loker Dosen {jurusan.name}</h1>
+              <h1 className="text-4xl font-black text-white md:text-5xl">Loker Dosen {staticJurusan.name}</h1>
               <p className="mt-4 max-w-2xl text-lg text-slate-200">
-                {jurusan.description}
+                {staticJurusan.description}
               </p>
             </div>
           </div>
@@ -63,14 +92,14 @@ export default async function JurusanPage({ params }: { params: Promise<{ jurusa
         {/* Listings */}
         <main className="mx-auto max-w-7xl px-6 pb-24">
           <div className="mb-8 flex items-center justify-between">
-            <h2 className="text-2xl font-black text-slate-900 dark:text-white">Lowongan Tersedia ({jurusan.items.length})</h2>
+            <h2 className="text-2xl font-black text-slate-900 dark:text-white">Lowongan Tersedia ({displayItems.length})</h2>
           </div>
 
           <div className="grid gap-6">
-            {jurusan.items.map((item) => (
+            {displayItems.map((item) => (
               <Link
                 key={item.id}
-                href={`/loker-dosen/${jurusan.slug}/${item.slug}`}
+                href={`/loker-dosen/${jurusanSlug}/${item.slug}`}
                 className="group flex flex-col gap-6 rounded-3xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 transition-all hover:border-blue-200 dark:hover:border-blue-900/50 hover:shadow-xl dark:hover:shadow-black/40 md:flex-row md:items-center"
               >
                 <div className="relative h-40 w-full shrink-0 overflow-hidden rounded-2xl md:h-32 md:w-48">
@@ -85,7 +114,7 @@ export default async function JurusanPage({ params }: { params: Promise<{ jurusa
                 <div className="flex-1">
                   <div className="mb-2 flex flex-wrap gap-3">
                     <span className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-blue-600">
-                      {jurusan.name}
+                      {staticJurusan.name}
                     </span>
                   </div>
                   <h3 className="mb-3 text-xl font-black text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">

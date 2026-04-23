@@ -19,14 +19,22 @@ export function ThemeToggle() {
 
     return (
         <button
-            onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+            onClick={() =>
+                setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
+            }
             className="btn-ghost group"
             aria-label="Toggle theme"
         >
             {resolvedTheme === 'dark' ? (
-                <Sun size={20} className="text-yellow-500 transition-transform group-hover:rotate-45" />
+                <Sun
+                    size={20}
+                    className="text-yellow-500 transition-transform group-hover:rotate-45"
+                />
             ) : (
-                <Moon size={20} className="text-blue-600 transition-transform group-hover:-rotate-12" />
+                <Moon
+                    size={20}
+                    className="text-blue-600 transition-transform group-hover:-rotate-12"
+                />
             )}
         </button>
     )

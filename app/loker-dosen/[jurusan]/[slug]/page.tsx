@@ -1,4 +1,4 @@
-import { DATA_JURUSAN } from '@/lib/data'
+import { DATA_JURUSAN, JobDetail } from '@/lib/data'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -12,6 +12,7 @@ import {
     ArrowLeft,
 } from 'lucide-react'
 import Navbar from '@/components/Navbar'
+import { getArticleBySlug } from '@/lib/api'
 
 export async function generateMetadata({
     params,
@@ -19,6 +20,16 @@ export async function generateMetadata({
     params: Promise<{ jurusan: string; slug: string }>
 }) {
     const { jurusan: jurusanSlug, slug: jobSlug } = await params
+    
+    // Try dynamic first
+    const apiArticle = await getArticleBySlug(jurusanSlug, jobSlug);
+    if (apiArticle) {
+        return {
+            title: apiArticle.title,
+            description: apiArticle.metaDescription,
+        }
+    }
+
     const jurusan = DATA_JURUSAN.find((j) => j.slug === jurusanSlug)
     const job = jurusan?.items.find((item) => item.slug === jobSlug)
 
@@ -30,48 +41,90 @@ export async function generateMetadata({
     }
 }
 
+function cleanHtmlContent(html: string) {
+    if (!html) return '';
+    
+    // Decode basic HTML entities if they exist (to handle escaped HTML)
+    let cleaned = html
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#039;/g, "'")
+        .replace(/&amp;/g, '&');
+
+    // Remove pre/code wrappers if present
+    cleaned = cleaned.replace(/<pre><code class="language-html">|<\/code><\/pre>/g, '');
+    
+    // Try to extract only the article part
+    const articleMatch = cleaned.match(/<article[^>]*>([\s\S]*?)<\/article>/i);
+    if (articleMatch) {
+        cleaned = articleMatch[1];
+    } else {
+        // Fallback to body
+        const bodyMatch = cleaned.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+        if (bodyMatch) {
+            cleaned = bodyMatch[1];
+        }
+    }
+    
+    // Remove structural tags if still present
+    cleaned = cleaned.replace(/<!doctype html>|<html>|<\/html>|<head>[\s\S]*?<\/head>|<meta[\s\S]*?>|<title>[\s\S]*?<\/title>|<body>|<\/body>/gi, '');
+    
+    return cleaned.trim();
+}
+
 export default async function JobDetailPage({
     params,
 }: {
     params: Promise<{ jurusan: string; slug: string }>
 }) {
     const { jurusan: jurusanSlug, slug: jobSlug } = await params
-    const jurusan = DATA_JURUSAN.find((j) => j.slug === jurusanSlug)
-    const job = jurusan?.items.find((item) => item.slug === jobSlug)
+    
+    let job: JobDetail | null = null;
+    let isDynamic = false;
+    let rawContent = '';
+
+    // Check if it's Akuntansi or Manajemen (Dynamic)
+    if (jurusanSlug === 'akuntansi' || jurusanSlug === 'manajemen') {
+        const apiArticle = await getArticleBySlug(jurusanSlug, jobSlug);
+        if (apiArticle) {
+            isDynamic = true;
+            rawContent = apiArticle.content;
+            job = {
+                id: apiArticle.id,
+                jurusan: jurusanSlug,
+                daerah: apiArticle.title.split(' di ').length > 1 ? apiArticle.title.split(' di ')[1].split(' Periode')[0] : "Indonesia",
+                bulan: "April",
+                tahun: 2026,
+                slug: apiArticle.slug,
+                title: apiArticle.title,
+                thumbnail: apiArticle.thumbnailUrl,
+                university: "Universitas Stekom",
+                description: apiArticle.metaDescription,
+                qualificationIntro: "Kualifikasi Umum:",
+                qualifications: [],
+                applyEmail: "hrd@stekom.ac.id"
+            };
+        }
+    }
+
+    // Fallback to static if not found in dynamic
+    if (!job) {
+        const staticJurusan = DATA_JURUSAN.find((j) => j.slug === jurusanSlug)
+        const staticJob = staticJurusan?.items.find((item) => item.slug === jobSlug)
+        if (staticJob) {
+            job = staticJob;
+        }
+    }
 
     if (!job) {
         notFound()
     }
 
-    // JSON-LD for JobPosting
-    const jsonLd = {
-        '@context': 'https://schema.org',
-        '@type': 'JobPosting',
-        title: job.title,
-        description: job.description,
-        employmentType: 'FULL_TIME',
-        datePosted: `${job.tahun}-04-01`,
-        jobLocation: {
-            '@type': 'Place',
-            address: {
-                '@type': 'PostalAddress',
-                addressLocality: job.daerah,
-                addressCountry: 'ID',
-            },
-        },
-        hiringOrganization: {
-            '@type': 'Organization',
-            name: job.university,
-        },
-    }
+    const staticJurusanName = DATA_JURUSAN.find(j => j.slug === jurusanSlug)?.name || jurusanSlug;
 
     return (
         <div className="min-h-screen bg-white dark:bg-slate-950 font-sans text-slate-900 dark:text-slate-100 transition-colors duration-300">
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-            />
-
             <Navbar />
 
             <main className="mx-auto max-w-7xl px-6 py-12">
@@ -83,7 +136,7 @@ export default async function JobDetailPage({
                             className="mb-8 inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:text-blue-700"
                         >
                             <ArrowLeft size={16} /> Kembali ke Daftar Lowongan{' '}
-                            {jurusan?.name}
+                            {staticJurusanName}
                         </Link>
 
                         <div className="relative mb-10 h-[400px] w-full overflow-hidden rounded-3xl shadow-lg">
@@ -115,35 +168,44 @@ export default async function JobDetailPage({
                         </div>
 
                         <div className="prose prose-slate dark:prose-invert max-w-none">
-                            <h2 className="text-2xl font-black text-slate-900 dark:text-white">
-                                Deskripsi Pekerjaan
-                            </h2>
-                            <p className="text-lg leading-relaxed text-slate-600 dark:text-slate-300">
-                                {job.description}
-                            </p>
+                            {isDynamic ? (
+                                <div 
+                                    className="dynamic-content"
+                                    dangerouslySetInnerHTML={{ __html: cleanHtmlContent(rawContent) }} 
+                                />
+                            ) : (
+                                <>
+                                    <h2 className="text-2xl font-black text-slate-900 dark:text-white">
+                                        Deskripsi Pekerjaan
+                                    </h2>
+                                    <p className="text-lg leading-relaxed text-slate-600 dark:text-slate-300">
+                                        {job.description}
+                                    </p>
 
-                            <div className="my-12 h-px bg-slate-100 dark:bg-slate-800" />
+                                    <div className="my-12 h-px bg-slate-100 dark:bg-slate-800" />
 
-                            <h2 className="text-2xl font-black text-slate-900 dark:text-white">
-                                Kualifikasi Pelamar
-                            </h2>
-                            <p className="mb-6 text-lg text-slate-600 dark:text-slate-300">
-                                {job.qualificationIntro}
-                            </p>
-                            <ul className="space-y-4">
-                                {job.qualifications.map((q, i) => (
-                                    <li
-                                        key={i}
-                                        className="flex items-start gap-3 text-lg text-slate-600 dark:text-slate-300"
-                                    >
-                                        <CheckCircle2
-                                            size={24}
-                                            className="mt-0.5 shrink-0 text-green-500 dark:text-green-400"
-                                        />
-                                        {q}
-                                    </li>
-                                ))}
-                            </ul>
+                                    <h2 className="text-2xl font-black text-slate-900 dark:text-white">
+                                        Kualifikasi Pelamar
+                                    </h2>
+                                    <p className="mb-6 text-lg text-slate-600 dark:text-slate-300">
+                                        {job.qualificationIntro}
+                                    </p>
+                                    <ul className="space-y-4">
+                                        {job.qualifications.map((q, i) => (
+                                            <li
+                                                key={i}
+                                                className="flex items-start gap-3 text-lg text-slate-600 dark:text-slate-300"
+                                            >
+                                                <CheckCircle2
+                                                    size={24}
+                                                    className="mt-0.5 shrink-0 text-green-500 dark:text-green-400"
+                                                />
+                                                {q}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </>
+                            )}
                         </div>
                     </div>
 
