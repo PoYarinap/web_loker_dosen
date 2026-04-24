@@ -1,6 +1,4 @@
 const API_BASE_URL = 'https://seomaster.stekom.ac.id/api/public/organizations';
-const ORG_ID = process.env.SEOMASTER_ORG_ID;
-const API_KEY = process.env.SEOMASTER_API_KEY;
 
 export interface APIContent {
     id: string;
@@ -22,12 +20,15 @@ export interface APIResponse {
     totalPages: number;
 }
 
-const PROJECT_IDS: Record<string, string | undefined> = {
-    'akuntansi': process.env.PROJECT_ID_AKUNTANSI,
-    'manajemen': process.env.PROJECT_ID_MANAJEMEN,
-};
-
 export async function getArticlesByJurusan(jurusanSlug: string): Promise<APIContent[]> {
+    const ORG_ID = process.env.SEOMASTER_ORG_ID;
+    const API_KEY = process.env.SEOMASTER_API_KEY;
+
+    const PROJECT_IDS: Record<string, string | undefined> = {
+        'akuntansi': process.env.PROJECT_ID_AKUNTANSI,
+        'manajemen': process.env.PROJECT_ID_MANAJEMEN,
+    };
+
     const projectId = PROJECT_IDS[jurusanSlug];
     console.log(`[API] Fetching articles for ${jurusanSlug} with projectId: ${projectId}`);
     
@@ -35,8 +36,10 @@ export async function getArticlesByJurusan(jurusanSlug: string): Promise<APICont
         console.warn(`[API] No projectId found for jurusan: ${jurusanSlug}`);
         return [];
     }
+
     if (!ORG_ID || !API_KEY) {
-        console.warn('[API] Missing SEOMASTER_ORG_ID or SEOMASTER_API_KEY in environment');
+        console.error('[API] CRITICAL: Missing SEOMASTER_ORG_ID or SEOMASTER_API_KEY in environment');
+        console.log('[API] Environment keys available:', Object.keys(process.env).filter(k => k.includes('SEOMASTER') || k.includes('PROJECT_ID')));
         return [];
     }
 
@@ -54,6 +57,8 @@ export async function getArticlesByJurusan(jurusanSlug: string): Promise<APICont
 
         if (!response.ok) {
             console.error(`[API] Fetch failed with status: ${response.status}`);
+            const errorText = await response.text();
+            console.error(`[API] Error details: ${errorText.substring(0, 200)}`);
             return [];
         }
         
@@ -61,7 +66,7 @@ export async function getArticlesByJurusan(jurusanSlug: string): Promise<APICont
         console.log(`[API] Successfully fetched ${result.data?.length || 0} articles`);
         return result.data || [];
     } catch (error) {
-        console.error('[API] Error fetching articles:', error);
+        console.error('[API] Unexpected error fetching articles:', error);
         return [];
     }
 }
@@ -71,3 +76,4 @@ export async function getArticleBySlug(jurusanSlug: string, jobSlug: string): Pr
     const articles = await getArticlesByJurusan(jurusanSlug);
     return articles.find(a => a.slug === jobSlug) || null;
 }
+

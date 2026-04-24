@@ -14,6 +14,8 @@ import {
 import Navbar from '@/components/Navbar'
 import { getArticleBySlug } from '@/lib/api'
 
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata({
     params,
 }: {

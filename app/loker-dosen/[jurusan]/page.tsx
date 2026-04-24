@@ -6,6 +6,8 @@ import { MapPin, Calendar, ArrowRight, ChevronRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { getArticlesByJurusan } from "@/lib/api";
 
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata({ params }: { params: Promise<{ jurusan: string }> }) {
   const { jurusan: jurusanSlug } = await params;
   const jurusan = DATA_JURUSAN.find((j) => j.slug === jurusanSlug);
