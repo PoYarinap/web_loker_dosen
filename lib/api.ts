@@ -44,7 +44,8 @@ export async function getArticlesByJurusan(jurusanSlug: string): Promise<APICont
     }
 
     try {
-        const url = `${API_BASE_URL}/${ORG_ID}/contents?projectId=${projectId}&page=1&limit=10`;
+        // Tambahkan parameter v=2 untuk memaksa Next.js & Vercel menghapus cache lama (Cache Busting)
+        const url = `${API_BASE_URL}/${ORG_ID}/contents?projectId=${projectId}&page=1&limit=10&v=2`;
         console.log(`[API] Calling URL: ${url}`);
         
         const response = await fetch(url, {
