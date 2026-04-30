@@ -16,11 +16,20 @@ import Image from 'next/image'
 import { DATA_JURUSAN } from '@/lib/data'
 import JurusanCard from '@/components/JurusanCard'
 import Navbar from '@/components/Navbar'
+import { useEffect } from 'react'
 
 export default function HomePage() {
     const [searchQuery, setSearchQuery] = useState('')
     const [locationQuery, setLocationQuery] = useState('')
     const [isSearching, setIsSearching] = useState(false)
+    const [dynamicCounts, setDynamicCounts] = useState<Record<string, number>>({})
+
+    useEffect(() => {
+        fetch('/api/counts')
+            .then(res => res.json())
+            .then(data => setDynamicCounts(data))
+            .catch(err => console.error('Error fetching dynamic counts:', err))
+    }, [])
 
     // Flatten all jobs into a single list for searching
     const allJobs = useMemo(() => {
@@ -332,7 +341,7 @@ export default function HomePage() {
                                     slug={jurusan.slug}
                                     thumbnail={jurusan.thumbnail}
                                     description={jurusan.description}
-                                    count={jurusan.items.length}
+                                    count={dynamicCounts[jurusan.slug] !== undefined ? dynamicCounts[jurusan.slug] : jurusan.items.length}
                                 />
                             ))}
                         </div>

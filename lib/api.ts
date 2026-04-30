@@ -99,3 +99,41 @@ export async function getArticleBySlug(
     const articles = await getArticlesByJurusan(jurusanSlug)
     return articles.find((a) => a.slug === jobSlug) || null
 }
+
+export async function getCountsByJurusan(): Promise<Record<string, number>> {
+    const slugs = ['akuntansi', 'manajemen']
+    const counts: Record<string, number> = {}
+
+    for (const slug of slugs) {
+        try {
+            const ORG_ID = process.env.SEOMASTER_ORG_ID
+            const API_KEY = process.env.SEOMASTER_API_KEY
+            const PROJECT_IDS: Record<string, string | undefined> = {
+                akuntansi: process.env.PROJECT_ID_AKUNTANSI,
+                manajemen: process.env.PROJECT_ID_MANAJEMEN,
+            }
+            const projectId = PROJECT_IDS[slug]
+
+            if (!projectId || !ORG_ID || !API_KEY) continue
+
+            const url = `${API_BASE_URL}/${ORG_ID}/contents?projectId=${projectId}&page=1&limit=10&v=3`
+            const response = await fetch(url, {
+                headers: {
+                    'X-API-Key': API_KEY,
+                    Accept: 'application/json',
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                },
+                next: { revalidate: 3600 }
+            })
+
+            if (response.ok) {
+                const result: APIResponse = await response.json()
+                counts[slug] = result.data?.length || 0
+            }
+        } catch (error) {
+            console.error(`[API] Error fetching count for ${slug}:`, error)
+        }
+    }
+
+    return counts
+}
