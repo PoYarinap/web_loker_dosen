@@ -1,5 +1,5 @@
 # Menggunakan Node.js versi 18
-FROM node:18-alpine
+FROM node:20-alpine
 
 # Set folder kerja di dalam server
 WORKDIR /app
