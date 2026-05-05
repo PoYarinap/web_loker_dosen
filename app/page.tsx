@@ -235,78 +235,8 @@ export default function HomePage() {
                 </section>
             ) : (
                 <>
-                    {/* Stats Section */}
-                    <section className="relative mx-auto -mt-16 max-w-6xl px-6">
-                        <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
-                            {[
-                                {
-                                    label: 'Loker Aktif',
-                                    value: Object.values(dynamicCounts).reduce((a, b) => a + b, 0) > 0 
-                                        ? `${Object.values(dynamicCounts).reduce((a, b) => a + b, 0).toLocaleString()}+`
-                                        : '1,100+',
-                                    icon: (
-                                        <Briefcase
-                                            className="text-blue-600"
-                                            size={24}
-                                        />
-                                    ),
-                                    color: 'bg-blue-50',
-                                },
-                                {
-                                    label: 'Universitas',
-                                    value: '300+',
-                                    icon: (
-                                        <School
-                                            className="text-purple-600"
-                                            size={24}
-                                        />
-                                    ),
-                                    color: 'bg-purple-50',
-                                },
-                                {
-                                    label: 'Pendaftar',
-                                    value: '25k+',
-                                    icon: (
-                                        <Users
-                                            className="text-emerald-600"
-                                            size={24}
-                                        />
-                                    ),
-                                    color: 'bg-emerald-50',
-                                },
-                                {
-                                    label: 'Jurusan',
-                                    value: '80+',
-                                    icon: (
-                                        <LibraryBig
-                                            className="text-orange-600"
-                                            size={24}
-                                        />
-                                    ),
-                                    color: 'bg-orange-50',
-                                },
-                            ].map((stat, i) => (
-                                <div
-                                    key={i}
-                                    className="stat-card group"
-                                >
-                                    <div
-                                        className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${stat.color} dark:bg-slate-800 transition-transform group-hover:scale-110`}
-                                    >
-                                        {stat.icon}
-                                    </div>
-                                    <div>
-                                        <div className="text-2xl font-black text-slate-900 dark:text-white">
-                                            {stat.value}
-                                        </div>
-                                        <div className="text-sm font-bold text-slate-400">
-                                            {stat.label}
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
+                    {/* Space after hero */}
+                    <div className="py-12"></div>
 
                     {/* Categories */}
                     <section

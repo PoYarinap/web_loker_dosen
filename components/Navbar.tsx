@@ -12,8 +12,7 @@ export default function Navbar() {
     const navLinks = [
         { href: "/", label: "Home" },
         { href: "/loker-dosen", label: "Semua Lowongan" },
-        { href: "/panduan-karir", label: "Panduan Karir" },
-        { href: "/tentang-kami", label: "Tentang Kami" },
+        { href: "/tentang-kami", label: "Hubungi Kami" },
     ];
 
     return (
@@ -51,14 +50,6 @@ export default function Navbar() {
                 <div className="flex items-center gap-3">
                     <ThemeToggle />
                     
-                    {/* Desktop Pasang Loker */}
-                    <Link 
-                        href="/tentang-kami"
-                        className="hidden md:block rounded-full bg-blue-900 px-6 py-2.5 text-sm font-bold text-white transition-all hover:bg-blue-800 hover:shadow-lg active:scale-95 text-center"
-                    >
-                        Pasang Loker
-                    </Link>
-
                     {/* Mobile Menu Button */}
                     <button 
                         onClick={() => setIsOpen(!isOpen)}
@@ -84,13 +75,6 @@ export default function Navbar() {
                                 {link.label}
                             </Link>
                         ))}
-                        <Link 
-                            href="/tentang-kami"
-                            onClick={() => setIsOpen(false)}
-                            className="mt-2 w-full rounded-2xl bg-blue-900 py-4 text-center text-sm font-black text-white shadow-xl shadow-blue-950/20"
-                        >
-                            Pasang Loker
-                        </Link>
                     </div>
                 </div>
             )}

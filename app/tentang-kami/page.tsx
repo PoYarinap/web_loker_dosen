@@ -65,39 +65,13 @@ export default function AboutPage() {
       {/* Hero Section */}
       <section className="py-24 px-6 bg-slate-50 dark:bg-slate-900/50">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-6xl font-black mb-8">Berdedikasi untuk <span className="text-blue-600">Pendidikan</span> Indonesia</h1>
+          <h1 className="text-4xl md:text-6xl font-black mb-8">Hubungi <span className="text-blue-600">Tim Kami</span></h1>
           <p className="text-xl text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
-            Web Loker Dosen adalah platform nomor satu yang menghubungkan akademisi berbakat dengan institusi pendidikan terbaik di seluruh tanah air.
+            Memiliki pertanyaan atau ingin bekerja sama? Kami siap membantu anda menemukan solusi terbaik untuk kebutuhan karir akademik.
           </p>
         </div>
       </section>
 
-      {/* Mission Section */}
-      <section className="py-24 px-6 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          <div className="text-center group">
-            <div className="mx-auto w-20 h-20 bg-blue-100 dark:bg-blue-900/30 rounded-3xl flex items-center justify-center mb-6 transition-transform group-hover:rotate-12">
-              <Target className="text-blue-600" size={40} />
-            </div>
-            <h3 className="text-2xl font-black mb-4">Visi</h3>
-            <p className="text-slate-500 dark:text-slate-400 font-bold text-sm">Menjadi pusat informasi karir akademik paling transparan dan terpercaya.</p>
-          </div>
-          <div className="text-center group">
-            <div className="mx-auto w-20 h-20 bg-purple-100 dark:bg-purple-900/30 rounded-3xl flex items-center justify-center mb-6 transition-transform group-hover:rotate-12">
-              <Eye className="text-purple-600" size={40} />
-            </div>
-            <h3 className="text-2xl font-black mb-4">Misi</h3>
-            <p className="text-slate-500 dark:text-slate-400 font-bold text-sm">Mempermudah kampus mencari talenta dan dosen menemukan tempat bertumbuh.</p>
-          </div>
-          <div className="text-center group">
-            <div className="mx-auto w-20 h-20 bg-emerald-100 dark:bg-emerald-900/30 rounded-3xl flex items-center justify-center mb-6 transition-transform group-hover:rotate-12">
-              <Heart className="text-emerald-600" size={40} />
-            </div>
-            <h3 className="text-2xl font-black mb-4">Nilai</h3>
-            <p className="text-slate-500 dark:text-slate-400 font-bold text-sm">Integritas, Inovasi, dan Pemberdayaan bagi seluruh pendidik Indonesia.</p>
-          </div>
-        </div>
-      </section>
 
       {/* Contact Section - Styled like CTA (Refined Sizes) */}
       <section className="px-6 mb-24">

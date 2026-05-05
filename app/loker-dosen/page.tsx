@@ -62,17 +62,17 @@ export default function LokerDosenPage() {
                         
                         <div className="relative z-10">
                             <h2 className="mb-6 text-3xl font-black md:text-5xl tracking-tight">
-                                Ingin Memasang <span className="text-blue-300">Lowongan?</span>
+                                Hubungi <span className="text-blue-300">Tim Kami</span>
                             </h2>
                             <p className="mx-auto mb-10 max-w-xl text-blue-100 text-lg font-medium leading-relaxed opacity-90">
-                                Bergabunglah dengan ratusan universitas lainnya
-                                untuk mendapatkan kandidat dosen terbaik di Indonesia.
+                                Memiliki pertanyaan atau ingin bekerja sama memasang
+                                lowongan dosen? Kami siap membantu anda.
                             </p>
                             <Link 
                                 href="/tentang-kami"
                                 className="inline-block rounded-full bg-white px-12 py-4 font-black text-blue-900 transition-all hover:bg-blue-50 hover:scale-105 hover:shadow-2xl active:scale-95"
                             >
-                                Hubungi Tim Kami
+                                Hubungi Kami
                             </Link>
                         </div>
                     </div>
