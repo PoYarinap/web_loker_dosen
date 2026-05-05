@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Navbar from "@/components/Navbar";
-import { Mail, Phone, Target, Eye, Heart, CheckCircle2, Loader2 } from "lucide-react";
+import { Mail, Phone, CheckCircle2, Loader2 } from "lucide-react";
 
 export default function AboutPage() {
   const [formData, setFormData] = useState({

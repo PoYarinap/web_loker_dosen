@@ -4,10 +4,6 @@ import {
     Search,
     MapPin,
     ArrowRight,
-    Briefcase,
-    School,
-    Users,
-    LibraryBig,
     X,
 } from 'lucide-react'
 import { useState, useMemo } from 'react'

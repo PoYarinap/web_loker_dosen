@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
 import { getCountsByJurusan } from '@/lib/api'
-import { LandPlotIcon } from 'lucide-react'
 
 export async function GET() {
     try {
