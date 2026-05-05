@@ -241,7 +241,9 @@ export default function HomePage() {
                             {[
                                 {
                                     label: 'Loker Aktif',
-                                    value: '1,250+',
+                                    value: Object.values(dynamicCounts).reduce((a, b) => a + b, 0) > 0 
+                                        ? `${Object.values(dynamicCounts).reduce((a, b) => a + b, 0).toLocaleString()}+`
+                                        : '1,100+',
                                     icon: (
                                         <Briefcase
                                             className="text-blue-600"

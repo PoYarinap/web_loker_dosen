@@ -21,8 +21,10 @@ export interface APIResponse {
 }
 
 export async function getArticlesByJurusan(
-    jurusanSlug: string
-): Promise<APIContent[]> {
+    jurusanSlug: string,
+    page: number = 1,
+    limit: number = 10
+): Promise<APIResponse | null> {
     const ORG_ID = process.env.SEOMASTER_ORG_ID
     const API_KEY = process.env.SEOMASTER_API_KEY
 
@@ -33,30 +35,23 @@ export async function getArticlesByJurusan(
 
     const projectId = PROJECT_IDS[jurusanSlug]
     console.log(
-        `[API] Fetching articles for ${jurusanSlug} with projectId: ${projectId}`
+        `[API] Fetching articles for ${jurusanSlug} with projectId: ${projectId}, page: ${page}`
     )
 
     if (!projectId) {
         console.warn(`[API] No projectId found for jurusan: ${jurusanSlug}`)
-        return []
+        return null
     }
 
     if (!ORG_ID || !API_KEY) {
         console.error(
             '[API] CRITICAL: Missing SEOMASTER_ORG_ID or SEOMASTER_API_KEY in environment'
         )
-        console.log(
-            '[API] Environment keys available:',
-            Object.keys(process.env).filter(
-                (k) => k.includes('SEOMASTER') || k.includes('PROJECT_ID')
-            )
-        )
-        return []
+        return null
     }
 
     try {
-        // Tambahkan parameter v=2 untuk memaksa Next.js & Vercel menghapus cache lama (Cache Busting)
-        const url = `${API_BASE_URL}/${ORG_ID}/contents?projectId=${projectId}&page=1&limit=10&v=3`
+        const url = `${API_BASE_URL}/${ORG_ID}/contents?projectId=${projectId}&page=${page}&limit=${limit}&v=4`
         console.log(`[API] Calling URL: ${url}`)
 
         const response = await fetch(url, {
@@ -66,26 +61,21 @@ export async function getArticlesByJurusan(
                 'User-Agent':
                     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
             },
-            next: { revalidate: 0 }, // Set ke 0 agar tidak nge-cache sama sekali
+            next: { revalidate: 3600 },
         })
 
         if (!response.ok) {
             console.error(
                 `[API] Fetch failed for ${jurusanSlug}. Status: ${response.status} ${response.statusText}`
             )
-            const errorBody = await response.text().catch(() => 'No body')
-            console.error(`[API] Error Body: ${errorBody.substring(0, 500)}`)
-            return []
+            return null
         }
 
         const result: APIResponse = await response.json()
-        console.log(
-            `[API] Successfully fetched ${result.data?.length || 0} articles`
-        )
-        return result.data || []
+        return result
     } catch (error) {
         console.error('[API] Unexpected error fetching articles:', error)
-        return []
+        return null
     }
 }
 
@@ -96,8 +86,8 @@ export async function getArticleBySlug(
     console.log(
         `[API] Getting article by slug: ${jobSlug} for jurusan: ${jurusanSlug}`
     )
-    const articles = await getArticlesByJurusan(jurusanSlug)
-    return articles.find((a) => a.slug === jobSlug) || null
+    const result = await getArticlesByJurusan(jurusanSlug, 1, 1000)
+    return result?.data.find((a) => a.slug === jobSlug) || null
 }
 
 export async function getCountsByJurusan(): Promise<Record<string, number>> {
@@ -128,7 +118,7 @@ export async function getCountsByJurusan(): Promise<Record<string, number>> {
 
             if (response.ok) {
                 const result: APIResponse = await response.json()
-                counts[slug] = result.data?.length || 0
+                counts[slug] = result.total || 0
             }
         } catch (error) {
             console.error(`[API] Error fetching count for ${slug}:`, error)
