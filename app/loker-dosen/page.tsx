@@ -1,16 +1,22 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { DATA_JURUSAN } from '@/lib/data'
 import { Briefcase } from 'lucide-react'
 import JurusanCard from '@/components/JurusanCard'
 import Navbar from '@/components/Navbar'
 
-export const metadata = {
-    title: 'Daftar Jurusan Lowongan Dosen Terbaru 2026',
-    description:
-        'Pilih jurusan untuk melihat lowongan dosen terbaru di seluruh Indonesia berdasarkan bidang akademik.',
-}
-
 export default function LokerDosenPage() {
+    const [dynamicCounts, setDynamicCounts] = useState<Record<string, number>>({})
+
+    useEffect(() => {
+        fetch('/api/counts')
+            .then(res => res.json())
+            .then(data => setDynamicCounts(data))
+            .catch(err => console.error('Error fetching dynamic counts:', err))
+    }, [])
+
     return (
         <div className="min-h-screen bg-slate-50 dark:bg-slate-950 font-sans text-slate-900 dark:text-slate-100 transition-colors duration-300">
             <Navbar />
@@ -46,7 +52,7 @@ export default function LokerDosenPage() {
                             slug={jurusan.slug}
                             thumbnail={jurusan.thumbnail}
                             description={jurusan.description}
-                            count={jurusan.items.length}
+                            count={dynamicCounts[jurusan.slug] !== undefined ? dynamicCounts[jurusan.slug] : jurusan.items.length}
                         />
                     ))}
                 </div>

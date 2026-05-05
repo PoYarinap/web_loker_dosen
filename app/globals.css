@@ -11,55 +11,99 @@
     }
 }
 
-@utility card-premium {
-    @apply rounded-4xl bg-white dark:bg-slate-900 shadow-xl shadow-slate-200/50 dark:shadow-black/20 border border-transparent dark:border-slate-800 transition-all;
+/* Menggunakan @layer agar editor lebih mengenali aturan Tailwind */
+@layer base {
+    :root {
+        --background: #ffffff;
+        --foreground: #0f172a;
+        color-scheme: light;
+    }
+
+    .dark {
+        --background: #020617;
+        --foreground: #f8fafc;
+        color-scheme: dark;
+    }
+
+    html, body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+        background-color: var(--background);
+        color: var(--foreground);
+        transition: background-color 0.3s ease, color 0.3s ease;
+        font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
 }
 
-@utility input-field {
-    @apply w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 py-2.5 text-slate-900 dark:text-white focus:border-blue-600 focus:ring-0 focus:outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500 font-medium;
+@layer utilities {
+    .card-premium {
+        @apply rounded-4xl bg-white dark:bg-slate-900 shadow-xl shadow-slate-200/50 dark:shadow-black/20 border border-transparent dark:border-slate-800 transition-all;
+    }
+
+    .input-field {
+        @apply w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 py-2.5 text-slate-900 dark:text-white focus:border-blue-600 focus:ring-0 focus:outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500 font-medium;
+    }
+
+    .form-label {
+        @apply text-sm font-black tracking-wide text-slate-700 dark:text-slate-300 ml-1;
+    }
+
+    .btn-primary {
+        @apply flex items-center justify-center gap-2 py-4 rounded-xl font-bold text-base transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed shadow-xl bg-linear-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-500 hover:to-indigo-500 hover:shadow-blue-500/20;
+    }
+
+    .btn-ghost {
+        @apply flex items-center justify-center rounded-xl p-2.5 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-all active:scale-95;
+    }
+
+    .stat-card {
+        @apply flex items-center gap-5 rounded-4xl bg-white dark:bg-slate-900 p-6 shadow-xl shadow-slate-200/50 dark:shadow-black/20 border border-transparent dark:border-slate-800 transition-all hover:-translate-y-1 hover:shadow-2xl;
+    }
+
+    .float-btn-wa {
+        @apply fixed bottom-8 right-8 z-50 flex h-16 w-16 items-center justify-center rounded-full bg-[#25D366] text-white shadow-2xl shadow-green-500/40 transition-all hover:scale-110 hover:rotate-6 active:scale-95;
+    }
 }
 
-@utility form-label {
-    @apply text-sm font-black tracking-wide text-slate-700 dark:text-slate-300 ml-1;
+/* Styling untuk konten dinamis dari API */
+.dynamic-content {
+    @apply text-lg leading-relaxed text-slate-600 dark:text-slate-300;
 }
 
-@utility btn-primary {
-    @apply flex items-center justify-center gap-2 py-4 rounded-xl font-bold text-base transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed shadow-xl bg-linear-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-500 hover:to-indigo-500 hover:shadow-blue-500/20;
+.dynamic-content p {
+    @apply mb-6;
 }
 
-@utility btn-ghost {
-    @apply flex items-center justify-center rounded-xl p-2.5 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-all active:scale-95;
+.dynamic-content h1, 
+.dynamic-content h2, 
+.dynamic-content h3 {
+    @apply font-black text-slate-900 dark:text-white mt-12 mb-6 tracking-tight;
 }
 
-@utility stat-card {
-    @apply flex items-center gap-5 rounded-4xl bg-white dark:bg-slate-900 p-6 shadow-xl shadow-slate-200/50 dark:shadow-black/20 border border-transparent dark:border-slate-800 transition-all hover:-translate-y-1 hover:shadow-2xl;
+.dynamic-content h1 { @apply text-3xl md:text-4xl; }
+.dynamic-content h2 { @apply text-2xl md:text-3xl border-l-4 border-blue-600 pl-4 py-1; }
+.dynamic-content h3 { @apply text-xl md:text-2xl; }
+
+.dynamic-content ul {
+    @apply space-y-3 mb-10 list-disc pl-8;
 }
 
-@utility float-btn-wa {
-    @apply fixed bottom-8 right-8 z-50 flex h-16 w-16 items-center justify-center rounded-full bg-[#25D366] text-white shadow-2xl shadow-green-500/40 transition-all hover:scale-110 hover:rotate-6 active:scale-95;
+.dynamic-content li {
+    @apply pl-2 text-slate-600 dark:text-slate-300;
 }
 
-:root {
-    --background: #ffffff;
-    --foreground: #0f172a;
-    color-scheme: light;
+.dynamic-content b, 
+.dynamic-content strong {
+    @apply font-black text-slate-900 dark:text-white;
 }
 
-.dark {
-    --background: #020617;
-    --foreground: #f8fafc;
-    color-scheme: dark;
+.dynamic-content img {
+    @apply rounded-4xl shadow-2xl my-12 border border-slate-100 dark:border-slate-800;
 }
 
-html,
-body {
-    margin: 0;
-    padding: 0;
-    min-height: 100%;
-    background-color: var(--background);
-    color: var(--foreground);
-    transition: background-color 0.3s ease, color 0.3s ease;
-    font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+.dynamic-content br {
+    @apply block content-[''] mb-2;
 }

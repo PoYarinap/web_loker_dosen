@@ -46,32 +46,57 @@ export async function generateMetadata({
 function cleanHtmlContent(html: string) {
     if (!html) return '';
     
-    // Decode basic HTML entities if they exist (to handle escaped HTML)
-    let cleaned = html
-        .replace(/&lt;/g, '<')
-        .replace(/&gt;/g, '>')
-        .replace(/&quot;/g, '"')
-        .replace(/&#039;/g, "'")
-        .replace(/&amp;/g, '&');
+    let cleaned = html;
 
-    // Remove pre/code wrappers if present
+    // Step 1: Detect if the content is wrapped in <p> tags with escaped HTML inside
+    // Example: <p>&lt;article&gt;...</p>
+    if (cleaned.includes('&lt;') && cleaned.includes('&gt;')) {
+        // Remove the wrapping <p> tags that are just containers for the escaped code
+        cleaned = cleaned.replace(/<p>\s*(&lt;.*?&gt;)\s*<\/p>/gi, '$1');
+        cleaned = cleaned.replace(/<p>\s*&nbsp;\s*<\/p>/gi, '');
+        
+        // Unescape HTML entities
+        cleaned = cleaned
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&quot;/g, '"')
+            .replace(/&#039;/g, "'")
+            .replace(/&amp;/g, '&')
+            .replace(/&nbsp;/g, ' ');
+    }
+
+    // Step 2: Remove pre/code wrappers if present
     cleaned = cleaned.replace(/<pre><code class="language-html">|<\/code><\/pre>/g, '');
     
-    // Try to extract only the article part
+    // Step 3: Extract content from <article> or <body>
     const articleMatch = cleaned.match(/<article[^>]*>([\s\S]*?)<\/article>/i);
     if (articleMatch) {
         cleaned = articleMatch[1];
     } else {
-        // Fallback to body
         const bodyMatch = cleaned.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
         if (bodyMatch) {
             cleaned = bodyMatch[1];
         }
     }
     
-    // Remove structural tags if still present
+    // Step 4: Remove any remaining structural tags
     cleaned = cleaned.replace(/<!doctype html>|<html>|<\/html>|<head>[\s\S]*?<\/head>|<meta[\s\S]*?>|<title>[\s\S]*?<\/title>|<body>|<\/body>/gi, '');
     
+    // Step 5: Clean up specific tags and spacing
+    cleaned = cleaned
+        .replace(/<p>\s*<\/p>/gi, '') // Remove empty paragraphs
+        .replace(/(<br\s*\/?>\s*){2,}/gi, '<br>') // Reduce multiple breaks
+        .replace(/<p>&nbsp;<\/p>/gi, '')
+        .replace(/\n\s*\n/g, '\n');
+
+    // Step 6: Formatting headers if they aren't already h2/h3
+    // Some content might just be <b>Title</b> or <p>Title</p>
+    cleaned = cleaned
+        .replace(/<p><strong>(Loker Dosen.*?)<\/strong><\/p>/gi, '<h2>$1</h2>')
+        .replace(/<p><strong>(Kualifikasi.*?)<\/strong><\/p>/gi, '<h2>$1</h2>')
+        .replace(/<p>(Loker Dosen.*?)<\/p>/gi, '<h2>$1</h2>')
+        .replace(/<p>(Kualifikasi.*?)<\/p>/gi, '<h2>$1</h2>');
+
     return cleaned.trim();
 }
 
@@ -169,14 +194,14 @@ export default async function JobDetailPage({
                             </div>
                         </div>
 
-                        <div className="prose prose-slate dark:prose-invert max-w-none">
+                        <div>
                             {isDynamic ? (
                                 <div 
                                     className="dynamic-content"
                                     dangerouslySetInnerHTML={{ __html: cleanHtmlContent(rawContent) }} 
                                 />
                             ) : (
-                                <>
+                                <div className="prose prose-slate dark:prose-invert max-w-none">
                                     <h2 className="text-2xl font-black text-slate-900 dark:text-white">
                                         Deskripsi Pekerjaan
                                     </h2>
@@ -206,7 +231,7 @@ export default async function JobDetailPage({
                                             </li>
                                         ))}
                                     </ul>
-                                </>
+                                </div>
                             )}
                         </div>
                     </div>
