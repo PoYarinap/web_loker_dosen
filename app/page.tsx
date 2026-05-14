@@ -112,7 +112,7 @@ export default function HomePage() {
                             onSubmit={handleSearch}
                             className="w-full max-w-3xl rounded-3xl bg-white dark:bg-slate-900 p-2 shadow-2xl shadow-blue-100 dark:shadow-blue-900/20 md:rounded-full border dark:border-slate-800 transition-all"
                         >
-                            <div className="flex flex-col gap-2 md:flex-row">
+                            <div className="flex flex-col gap-1 md:flex-row">
                                 <div className="relative flex-1">
                                     <Search
                                         className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
@@ -128,6 +128,10 @@ export default function HomePage() {
                                         className="w-full rounded-full border-none px-12 py-4 text-slate-900 dark:text-white bg-transparent focus:outline-none focus:ring-0"
                                     />
                                 </div>
+
+                                {/* Divider khusus Mobile */}
+                                <div className="h-px bg-slate-100 dark:bg-slate-800 md:hidden mx-4"></div>
+
                                 <div className="relative flex-1 border-slate-100 dark:border-slate-800 md:border-l">
                                     <MapPin
                                         className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
@@ -145,7 +149,7 @@ export default function HomePage() {
                                 </div>
                                 <button
                                     type="submit"
-                                    className="rounded-full bg-blue-600 px-10 py-4 font-bold text-white transition-all hover:bg-blue-700 hover:shadow-lg active:scale-95"
+                                    className="w-full md:w-auto rounded-full bg-blue-600 px-10 py-4 font-bold text-white transition-all hover:bg-blue-700 hover:shadow-lg active:scale-95"
                                 >
                                     Cari Lowongan
                                 </button>
